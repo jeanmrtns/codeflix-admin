@@ -1,28 +1,73 @@
-import { Box, Button } from "@mui/material"
+import { Box, Button, IconButton, Typography } from "@mui/material"
 import { useAppSelector } from "../../app/hooks"
 import { selectCategories } from "./categorySlice"
 
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import { Link } from "react-router-dom"
+import {
+  DataGrid,
+  GridColDef,
+  GridDeleteIcon,
+  GridToolbar,
+} from "@mui/x-data-grid"
+import { format } from "date-fns"
+
+function renderActiveCell(isActive: boolean) {
+  return (
+    <Typography color={isActive ? "primary" : "secondary"}>
+      {isActive ? "Active" : "Inactive"}
+    </Typography>
+  )
+}
+
+function renderCreatedDate(date: Date) {
+  return (
+    <time dateTime={date.toDateString()}>
+      {format(new Date(date), "MM/d/yyyy")}
+    </time>
+  )
+}
+
+function renderActionCell(categoryId: string) {
+  function handleDeleteCategory() {
+    alert(categoryId)
+  }
+
+  return (
+    <IconButton
+      color="secondary"
+      aria-label="Delete category"
+      onClick={handleDeleteCategory}
+    >
+      <GridDeleteIcon />
+    </IconButton>
+  )
+}
 
 const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Name",
-    width: 150,
-    editable: true,
+    flex: 1,
+    type: "string",
   },
   {
     field: "is_active",
     headerName: "Active",
-    width: 150,
-    editable: true,
+    flex: 1,
+    type: "boolean",
+    renderCell: (row) => renderActiveCell(row.value),
   },
   {
     field: "created_at",
     headerName: "Created At",
-    width: 150,
-    editable: true,
+    flex: 1,
+    type: "dateTime",
+    renderCell: (row) => renderCreatedDate(row.value),
+  },
+  {
+    field: "actions",
+    headerName: "Actions",
+    flex: 1,
+    renderCell: (row) => renderActionCell(row.row.id),
   },
 ]
 
@@ -32,15 +77,29 @@ export function CategoryList() {
   return (
     <Box maxWidth="lg" sx={{ mb: 4, mt: 4 }}>
       <Box display="flex" justifyContent="flex-end">
-        <Link to="/categories/create">
-          <Button variant="contained" color="secondary" sx={{ mb: 2 }}>
-            Create Category
-          </Button>
-        </Link>
+        <Button
+          href="/categories/create"
+          variant="contained"
+          color="secondary"
+          sx={{ mb: 2 }}
+        >
+          Create Category
+        </Button>
       </Box>
       <DataGrid
         rows={categories}
         columns={columns}
+        slots={{
+          toolbar: GridToolbar,
+        }}
+        slotProps={{
+          toolbar: {
+            showQuickFilter: true,
+            quickFilterProps: {
+              debounceMs: 500,
+            },
+          },
+        }}
         initialState={{
           pagination: {
             paginationModel: {
@@ -49,8 +108,10 @@ export function CategoryList() {
           },
         }}
         pageSizeOptions={[5, 10, 20, 50, 100]}
-        checkboxSelection
         disableRowSelectionOnClick
+        disableColumnSelector
+        disableDensitySelector
+        disableColumnFilter
       />
     </Box>
   )

@@ -23,7 +23,7 @@ const category: Category = {
 
 const initialState = [
   category,
-  { ...category, id: "two-id", name: "My second category" },
+  { ...category, id: "two-id", name: "My second category", is_active: false },
   { ...category, id: "three-id", name: "My third category" },
 ]
 
