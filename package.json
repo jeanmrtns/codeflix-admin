@@ -19,6 +19,7 @@
     "@fontsource/roboto": "^5.0.5",
     "@mui/icons-material": "^5.14.0",
     "@mui/material": "^5.14.0",
+    "@mui/x-data-grid": "^6.10.0",
     "@reduxjs/toolkit": "^1.8.1",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
