@@ -6,9 +6,22 @@ import {
   DataGrid,
   GridColDef,
   GridDeleteIcon,
+  GridRenderCellParams,
   GridToolbar,
 } from "@mui/x-data-grid"
 import { format } from "date-fns"
+import { Link } from "react-router-dom"
+
+function renderNameCell(row: GridRenderCellParams) {
+  return (
+    <Link
+      style={{ textDecoration: "none" }}
+      to={`/categories/edit/${row.row.id}`}
+    >
+      <Typography color="primary">{row.value}</Typography>
+    </Link>
+  )
+}
 
 function renderActiveCell(isActive: boolean) {
   return (
@@ -18,9 +31,9 @@ function renderActiveCell(isActive: boolean) {
   )
 }
 
-function renderCreatedDate(date: Date) {
+function renderCreatedDate(date: string) {
   return (
-    <time dateTime={date.toDateString()}>
+    <time dateTime={new Date(date).toDateString()}>
       {format(new Date(date), "MM/d/yyyy")}
     </time>
   )
@@ -48,6 +61,7 @@ const columns: GridColDef[] = [
     headerName: "Name",
     flex: 1,
     type: "string",
+    renderCell: renderNameCell,
   },
   {
     field: "is_active",
@@ -60,7 +74,7 @@ const columns: GridColDef[] = [
     field: "created_at",
     headerName: "Created At",
     flex: 1,
-    type: "dateTime",
+    type: "string",
     renderCell: (row) => renderCreatedDate(row.value),
   },
   {

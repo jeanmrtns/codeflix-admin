@@ -6,17 +6,17 @@ interface Category {
   name: string
   description: string | null
   is_active: boolean
-  deleted_at: Date | null
-  created_at: Date
-  updated_at: Date
+  deleted_at: string | null
+  created_at: string
+  updated_at: string
 }
 
 const category: Category = {
   id: "one-id",
   name: "My First category",
   description: "My description",
-  created_at: new Date(),
-  updated_at: new Date(),
+  created_at: new Date().toString(),
+  updated_at: new Date().toString(),
   deleted_at: null,
   is_active: true,
 }
@@ -39,5 +39,21 @@ export const categorySlice = createSlice({
 
 export default categorySlice.reducer
 export const selectCategories = (state: RootState) => state.categories
+export const selectCategoryById = (state: RootState, id: string): Category => {
+  const category = state.categories.find((category) => category.id === id)
+
+  return (
+    category || {
+      description: "",
+      id: "",
+      name: "",
+      is_active: false,
+      created_at: "",
+      updated_at: "",
+      deleted_at: null,
+    }
+  )
+}
+
 export const { createCategory, updateCategory, deleteCategory } =
   categorySlice.actions
