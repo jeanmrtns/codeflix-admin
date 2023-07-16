@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
 import { selectCategoryById } from "./categorySlice"
 
@@ -64,14 +64,11 @@ export function EditCategory() {
             </Grid>
 
             <Grid item xs={12} sx={{ gap: 1, display: "flex" }}>
-              <Button
-                variant="contained"
-                color="secondary"
-                type="button"
-                href="/categories"
-              >
-                Cancel
-              </Button>
+              <Link to="/" style={{ textDecoration: "none" }}>
+                <Button variant="contained" color="secondary" type="button">
+                  Cancel
+                </Button>
+              </Link>
               <Button variant="contained" color="primary" type="submit">
                 Save
               </Button>
