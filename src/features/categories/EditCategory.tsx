@@ -1,17 +1,7 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  FormControl,
-  FormControlLabel,
-  Grid,
-  Paper,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material"
-import { Link, useParams } from "react-router-dom"
+import { Box, Paper, Typography } from "@mui/material"
+import { useParams } from "react-router-dom"
 import { useAppSelector } from "../../app/hooks"
+import { CategoryForm } from "./CategoryForm"
 import { selectCategoryById } from "./categorySlice"
 
 export function EditCategory() {
@@ -22,59 +12,18 @@ export function EditCategory() {
 
   return (
     <Box padding={2}>
-      <Typography>Edit Category</Typography>
       <Paper sx={{ padding: 2, width: "100%" }}>
-        <form>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <TextField
-                  name="name"
-                  label="Name"
-                  required
-                  value={category?.name}
-                />
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControl fullWidth>
-                <TextField
-                  name="description"
-                  label="Description"
-                  required
-                  value={category?.description}
-                />
-              </FormControl>
-            </Grid>
+        <Typography component="h3" fontSize={24} mb={2}>
+          Edit Category
+        </Typography>
 
-            <Grid item xs={12}>
-              <FormControlLabel
-                value={category.is_active}
-                control={
-                  <Switch
-                    checked={category.is_active}
-                    color="secondary"
-                    inputProps={{
-                      "aria-label": "controlled",
-                    }}
-                  />
-                }
-                label="Active"
-              />
-            </Grid>
-
-            <Grid item xs={12} sx={{ gap: 1, display: "flex" }}>
-              <Link to="/" style={{ textDecoration: "none" }}>
-                <Button variant="contained" color="secondary" type="button">
-                  Cancel
-                </Button>
-              </Link>
-              <Button variant="contained" color="primary" type="submit">
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
+        <CategoryForm
+          category={category}
+          handleChange={() => {}}
+          handleToggle={() => {}}
+          onSubmit={() => {}}
+          isLoading={false}
+        />
       </Paper>
     </Box>
   )
