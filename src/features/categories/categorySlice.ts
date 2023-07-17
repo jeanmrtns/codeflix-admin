@@ -40,7 +40,8 @@ export const categorySlice = createSlice({
       state[categoryIndex] = action.payload
     },
     deleteCategory: (state, action) => {
-      const id = action.payload.id
+      const id = action.payload
+
       const categoryIndex = state.findIndex((category) => category.id === id)
       state.splice(categoryIndex, 1)
     },
