@@ -6,7 +6,7 @@ import {
   Switch,
   TextField,
 } from "@mui/material"
-import { ChangeEvent } from "react"
+import { ChangeEvent, FormEvent } from "react"
 import { Link } from "react-router-dom"
 import { Category } from "./categorySlice"
 
@@ -15,7 +15,7 @@ interface CategoryFormProps {
   isLoading?: boolean
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void
   handleToggle: (event: ChangeEvent<HTMLInputElement>) => void
-  onSubmit: () => void
+  handleSubmit: (event: FormEvent<HTMLFormElement>) => void
 }
 
 export function CategoryForm({
@@ -23,10 +23,10 @@ export function CategoryForm({
   isLoading = false,
   handleChange,
   handleToggle,
-  onSubmit,
+  handleSubmit,
 }: CategoryFormProps) {
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <FormControl fullWidth>
@@ -35,6 +35,7 @@ export function CategoryForm({
               label="Name"
               required
               value={category?.name}
+              onChange={handleChange}
             />
           </FormControl>
         </Grid>
@@ -45,6 +46,7 @@ export function CategoryForm({
               label="Description"
               required
               value={category?.description}
+              onChange={handleChange}
             />
           </FormControl>
         </Grid>
@@ -55,6 +57,7 @@ export function CategoryForm({
             control={
               <Switch
                 checked={category.is_active}
+                onChange={handleToggle}
                 color="secondary"
                 inputProps={{
                   "aria-label": "controlled",

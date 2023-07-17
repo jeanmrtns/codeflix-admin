@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, Typography } from "@mui/material"
-import { useAppSelector } from "../../app/hooks"
-import { selectCategories } from "./categorySlice"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
+import { deleteCategory, selectCategories } from "./categorySlice"
 
 import {
   DataGrid,
@@ -12,81 +12,82 @@ import {
 import { format } from "date-fns"
 import { Link } from "react-router-dom"
 
-function renderNameCell(row: GridRenderCellParams) {
-  return (
-    <Link
-      style={{ textDecoration: "none" }}
-      to={`/categories/edit/${row.row.id}`}
-    >
-      <Typography color="primary">{row.value}</Typography>
-    </Link>
-  )
-}
-
-function renderActiveCell(isActive: boolean) {
-  return (
-    <Typography color={isActive ? "primary" : "secondary"}>
-      {isActive ? "Active" : "Inactive"}
-    </Typography>
-  )
-}
-
-function renderCreatedDate(date: string) {
-  return (
-    <time dateTime={new Date(date).toDateString()}>
-      {format(new Date(date), "MM/d/yyyy")}
-    </time>
-  )
-}
-
-function renderActionCell(categoryId: string) {
-  function handleDeleteCategory() {
-    alert(categoryId)
-  }
-
-  return (
-    <IconButton
-      color="secondary"
-      aria-label="Delete category"
-      onClick={handleDeleteCategory}
-    >
-      <GridDeleteIcon />
-    </IconButton>
-  )
-}
-
-const columns: GridColDef[] = [
-  {
-    field: "name",
-    headerName: "Name",
-    flex: 1,
-    type: "string",
-    renderCell: renderNameCell,
-  },
-  {
-    field: "is_active",
-    headerName: "Active",
-    flex: 1,
-    type: "boolean",
-    renderCell: (row) => renderActiveCell(row.value),
-  },
-  {
-    field: "created_at",
-    headerName: "Created At",
-    flex: 1,
-    type: "string",
-    renderCell: (row) => renderCreatedDate(row.value),
-  },
-  {
-    field: "actions",
-    headerName: "Actions",
-    flex: 1,
-    renderCell: (row) => renderActionCell(row.row.id),
-  },
-]
-
 export function CategoryList() {
   const categories = useAppSelector(selectCategories)
+  const dispatch = useAppDispatch()
+
+  function renderNameCell(row: GridRenderCellParams) {
+    return (
+      <Link
+        style={{ textDecoration: "none" }}
+        to={`/categories/edit/${row.row.id}`}
+      >
+        <Typography color="primary">{row.value}</Typography>
+      </Link>
+    )
+  }
+
+  function renderActiveCell(isActive: boolean) {
+    return (
+      <Typography color={isActive ? "primary" : "secondary"}>
+        {isActive ? "Active" : "Inactive"}
+      </Typography>
+    )
+  }
+
+  function renderCreatedDate(date: string) {
+    return (
+      <time dateTime={new Date(date).toDateString()}>
+        {format(new Date(date), "MM/d/yyyy")}
+      </time>
+    )
+  }
+
+  function renderActionCell(categoryId: string) {
+    function handleDeleteCategory() {
+      dispatch(deleteCategory(categoryId))
+    }
+
+    return (
+      <IconButton
+        color="secondary"
+        aria-label="Delete category"
+        onClick={handleDeleteCategory}
+      >
+        <GridDeleteIcon />
+      </IconButton>
+    )
+  }
+
+  const columns: GridColDef[] = [
+    {
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      type: "string",
+      renderCell: renderNameCell,
+    },
+    {
+      field: "is_active",
+      headerName: "Active",
+      flex: 1,
+      type: "boolean",
+      renderCell: (row) => renderActiveCell(row.value),
+    },
+    {
+      field: "created_at",
+      headerName: "Created At",
+      flex: 1,
+      type: "string",
+      renderCell: (row) => renderCreatedDate(row.value),
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 1,
+      renderCell: (row) => renderActionCell(row.row.id),
+    },
+  ]
 
   return (
     <Box maxWidth="lg" sx={{ mb: 4, mt: 4 }}>
@@ -98,6 +99,7 @@ export function CategoryList() {
         </Link>
       </Box>
       <DataGrid
+        sx={{ minHeight: 200, height: "100%" }}
         rows={categories}
         columns={columns}
         slots={{

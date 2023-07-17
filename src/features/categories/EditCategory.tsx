@@ -1,14 +1,42 @@
 import { Box, Paper, Typography } from "@mui/material"
 import { useParams } from "react-router-dom"
-import { useAppSelector } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import { CategoryForm } from "./CategoryForm"
-import { selectCategoryById } from "./categorySlice"
+import { Category, selectCategoryById, updateCategory } from "./categorySlice"
+import { ChangeEvent, FormEvent, useState } from "react"
 
 export function EditCategory() {
   const params = useParams()
+  const dispatch = useAppDispatch()
   const id = params.id || ""
 
   const category = useAppSelector((state) => selectCategoryById(state, id))
+  const [categoryState, setCategoryState] = useState<Category>(category)
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target
+    setCategoryState((prevState) => {
+      return {
+        ...prevState,
+        [name]: value,
+      }
+    })
+  }
+
+  const handleToggle = (event: ChangeEvent<HTMLInputElement>) => {
+    const { checked } = event.target
+    setCategoryState((prevState) => {
+      return {
+        ...prevState,
+        is_active: checked,
+      }
+    })
+  }
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    dispatch(updateCategory(categoryState))
+  }
 
   return (
     <Box padding={2}>
@@ -18,10 +46,10 @@ export function EditCategory() {
         </Typography>
 
         <CategoryForm
-          category={category}
-          handleChange={() => {}}
-          handleToggle={() => {}}
-          onSubmit={() => {}}
+          category={categoryState}
+          handleChange={handleChange}
+          handleToggle={handleToggle}
+          handleSubmit={handleSubmit}
           isLoading={false}
         />
       </Paper>
