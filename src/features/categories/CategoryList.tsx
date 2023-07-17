@@ -91,14 +91,11 @@ export function CategoryList() {
   return (
     <Box maxWidth="lg" sx={{ mb: 4, mt: 4 }}>
       <Box display="flex" justifyContent="flex-end">
-        <Button
-          href="/categories/create"
-          variant="contained"
-          color="secondary"
-          sx={{ mb: 2 }}
-        >
-          Create Category
-        </Button>
+        <Link to="/categories/create" style={{ textDecoration: "none" }}>
+          <Button variant="contained" color="secondary" sx={{ mb: 2 }}>
+            Create Category
+          </Button>
+        </Link>
       </Box>
       <DataGrid
         rows={categories}
