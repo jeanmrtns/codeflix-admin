@@ -15,16 +15,21 @@ export const router = createBrowserRouter([
         element: <CategoryList />,
       },
       {
-        path: "/categories",
+        path: "categories",
         element: <CategoryList />,
       },
       {
-        path: "/categories/edit/:id",
-        element: <EditCategory />,
-      },
-      {
-        path: "categories/create",
-        element: <CreateCategory />,
+        path: "categories",
+        children: [
+          {
+            path: "edit/:id",
+            element: <EditCategory />,
+          },
+          {
+            path: "create",
+            element: <CreateCategory />,
+          },
+        ],
       },
     ],
   },
